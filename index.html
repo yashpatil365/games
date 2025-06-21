@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Click the Button Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    h1 {
+      margin: 20px;
+      font-size: 6vw;
+    }
+    #game-area {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      overflow: hidden;
+    }
+    #clickBtn {
+      position: absolute;
+      padding: 20px 40px;
+      font-size: 5vw;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #clickBtn:hover {
+      background-color: #45a049;
+    }
+    #result {
+      font-size: 5vw;
+      margin-top: 20px;
+    }
+    #timer {
+      font-weight: bold;
+    }
+    .win-bg {
+      background-color: #d4f8e8;
+      color: #222;
+    }
+    .lose-bg {
+      background-color: #330000;
+      color: #ff9999;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 Click the Button Before 10 Seconds!</h1>
+
+  <div id="game-area">
+    <button id="clickBtn" onclick="win()">Click Me!</button>
+  </div>
+
+  <div id="result">⏳ Time left: <span id="timer">10</span> sec</div>
+
+  <script>
+    let timer = 10;
+    let interval;
+    let gameOver = false;
+
+    const btn = document.getElementById("clickBtn");
+    const gameArea = document.getElementById("game-area");
+    const resultDiv = document.getElementById("result");
+
+    function moveButton() {
+      const maxX = gameArea.clientWidth - btn.offsetWidth;
+      const maxY = gameArea.clientHeight - btn.offsetHeight;
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+      btn.style.left = randomX + "px";
+      btn.style.top = randomY + "px";
+    }
+
+    function countdown() {
+      interval = setInterval(() => {
+        if (timer <= 1 && !gameOver) {
+          lose();
+        } else {
+          timer--;
+          document.getElementById("timer").innerText = timer;
+          moveButton();
+        }
+      }, 1000);
+    }
+
+    function win() {
+      if (!gameOver) {
+        clearInterval(interval);
+        document.body.classList.add("win-bg");
+        resultDiv.innerHTML = "🎉 YASH KA BETA HAI NA ISSI LIYE JEET GAYA!";
+        gameOver = true;
+        btn.style.display = "none";
+      }
+    }
+
+    function lose() {
+      clearInterval(interval);
+      document.body.classList.add("lose-bg");
+      resultDiv.innerHTML = "❌ YE YASH KA BETA NAHI HO SAKTA!";
+      gameOver = true;
+      btn.style.display = "none";
+    }
+
+    // Start Game
+    moveButton();
+    countdown();
+  </script>
+
+</body>
+</html>
